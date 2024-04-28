@@ -4,6 +4,9 @@ def create_board() -> list[list[int]]:
     return [[None for _ in range(3)] for _ in range(3)]
 
 def get_coordinate(coordinate) -> int:
+    '''
+    Get a valid individual coordinate
+    '''
     valid_coordinate = [0, 1, 2]
     while True:
         value = input(f"Input of the {coordinate} coordinate: ")
@@ -17,6 +20,9 @@ def get_coordinate(coordinate) -> int:
             print("Invalid input type")
 
 def get_move(board: list[list[int]]) -> tuple[int]:
+    '''
+    Get a valid coordinate
+    '''
     while True:
         x = get_coordinate("x")
         y = get_coordinate("y")
@@ -26,17 +32,26 @@ def get_move(board: list[list[int]]) -> tuple[int]:
             break
     return (x, y)
 
-def make_move(board: list[list[int]], coordinate: tuple[int], player: str) -> list[list[int]]:    
+def make_move(board: list[list[int]], coordinate: tuple[int], player: str) -> list[list[int]]:
+    '''
+    For player to occupy a valid coordinate on the board
+    '''
     board[coordinate[0]][coordinate[1]] = player
     new_board = board
     return new_board
 
 def is_valid_move(board: list[list[int]], coordinate: tuple[int]) -> bool:
+    '''
+    Check if a coordinate on the board is already occupied
+    '''
     if board[coordinate[0]][coordinate[1]] is not None:
         return False
     return True
 
 def get_winner(board: list[list[int]]) -> str | None:
+    '''
+    Check if there is a winner by matching each line in the board by the winning lines
+    '''
     winning_lines = [
         # row
         [(0, 0), (0, 1), (0, 2)],
@@ -62,13 +77,18 @@ def get_winner(board: list[list[int]]) -> str | None:
     return None
 
 def is_draw(board: list[list[int]]) -> bool:
-    for i in range(0, 3):
-        for j in range(0, 3):
-            if board[i][j] == None:
-                return False
+    '''
+    Check if board is full
+    '''
+    for line in board:
+        if None in line:
+            return False
     return True
 
 def render(board: list[list[int]]) -> None:
+    '''
+    Render the board into the terminal
+    '''
     display_as = {
         None: " ",
         "O": Fore.BLUE + u"O" + Fore.RESET,

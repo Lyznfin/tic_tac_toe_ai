@@ -1,10 +1,9 @@
-import time
 from colorama import Fore
 
 def create_board() -> list[list[int]]:
     return [[None for _ in range(3)] for _ in range(3)]
 
-def get_move(board) -> tuple[int]:
+def get_move(board: list[list[int]]) -> tuple[int]:
     valid_coordinate = [0, 1, 2]
     while True:
         while True:
@@ -35,6 +34,31 @@ def is_valid_move(board: list[list[int]], coordinate: tuple[int]) -> bool:
         return False
     return True
 
+def get_winner(board: list[list[int]]) -> str | None:
+    winning_lines = [
+        # row
+        [(0, 0), (0, 1), (0, 2)],
+        [(1, 0), (1, 1), (1, 2)],
+        [(2, 0), (2, 1), (2, 2)],
+        # column
+        [(0, 0), (1, 0), (2, 0)],
+        [(0, 1), (1, 1), (2, 1)],
+        [(0, 2), (1, 2), (2, 2)],
+        # diagonal
+        [(0, 0), (1, 1), (2, 2)],
+        [(0, 2), (1, 1), (2, 0)]
+        ]
+
+    for line in winning_lines:
+        board_lines = [board[x][y] for (x, y) in line]
+        matching = set(board_lines)
+        if matching == None:
+            continue
+        if len(matching) == 1:
+            return matching.pop()
+        
+    return None
+
 def render(board: list[list[int]]) -> None:
     display_as = {
         None: " ",
@@ -53,6 +77,15 @@ def render(board: list[list[int]]) -> None:
     print(" ------- ")
 
 def main():
+    board = create_board()
+    players = [("player_1", "O"), ("player_2", "X")]
+    turn = 0
+    while True:
+        player = players[turn % 2]
+        move = get_move(board)
+        board = make_move(board, move, player[1])
+        render(board)
+        turn += 1
     board = make_move(create_board(), (0, 1), "O")
     board = make_move(board, (0, 2), "X")
     board = make_move(board, (0, 0), "O")

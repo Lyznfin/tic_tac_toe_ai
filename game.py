@@ -61,6 +61,13 @@ def get_winner(board: list[list[int]]) -> str | None:
         
     return None
 
+def is_draw(board: list[list[int]]) -> bool:
+    for i in range(0, 3):
+        for j in range(0, 3):
+            if board[i][j] == None:
+                return False
+    return True
+
 def render(board: list[list[int]]) -> None:
     display_as = {
         None: " ",
@@ -89,6 +96,9 @@ def run() -> None:
         render(board)
         winner = get_winner(board)
         if winner != None:
-            print(f"congrats {player[0]}, you've win!")
+            print(f"Congrats {player[0]}, you've win!")
+            break
+        if is_draw(board):
+            print("The game is a draw!")
             break
         turn += 1
